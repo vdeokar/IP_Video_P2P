@@ -1,0 +1,43 @@
+Each Chunk is 256 bytes. (Not 256KB)
+
+Option 0: Initialization. Send Videos locally available to Server.
+Client sends the port number and payload contains a semicolon seperated list of videos available at the Client's "user.home"\Videos
+NOTE:Client should send the Video title, numChunks and format. {title,numchunks} - format : intro to algos:8;intro to ai:4
+
+Example:
+|option|0|/option||data|6789::1.01 - A Storm Is Coming.mp3:5;1.02 - On Thin Ice.mp3:17;1.04 - Mind If I Cut In!.mp3:20;Captures:0;desktop.ini:0;|/data|
+----
+
+Option 1: Client is requesting a list of videos available with the swarm.
+Payload is null
+
+Example: 
+
+Option 2: Get video list from server
+All the videos that are present in the server are sent to the client.
+
+Example:
+|option|2|/option||data|1,Intro to Algos,8,mp3,2;2,Intro to networks,5,mp4,3;3,Intro to AI,6,mp4,4|/data|
+
+Option 3:  client chooses Video and requests for the video from server by sending VideoID
+
+Example :  |option|3|/option||data|7|/data|
+
+
+Option 4: Server responds with a list of peers
+The server sends a list of active peers to the client.
+
+Example:
+|option|4|/option||data|192.168.1.1:20000;192.168.1.2:24000;|/data|
+
+
+
+Option 100: Requestor peer asks for a specific chunk of a particular video
+
+Format: 	|option|100|/option|data|<video_title>:<chunk_number>|/data|
+Example: 	|option|100|/option|data|Sample192.mp4:184|/data|
+
+Option 101: Servant thread sends the required chunk of video along with the required info
+
+Format: 	|option|101|/option|data|<video_title>:<chunk_number>:<byte[].toString of chunk.bytes>|/data|
+Example: 	|option|101|/option|data|Sample192.mp4:184:[,,,,,,,,]|/data|
